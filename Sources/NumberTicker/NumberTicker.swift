@@ -8,24 +8,29 @@
 import SwiftUI
 
 public struct NumberTicker: View {
-    var number: Double
-    var decimalPlaces: Int
-    var prefix: String
-    var suffix: String
-    var decimalSeparator: String
-    var thousandsSeparator: String
-    var shouldAnimateToInitialNumber: Bool
-    var font: Font
-    var topBottomFadeDistance: CGFloat
-    var fadeColor: Color
+    // User initialized properties
+    private var number: Double
+    private var decimalPlaces: Int
+    private var prefix: String
+    private var suffix: String
+    private var decimalSeparator: String
+    private var thousandsSeparator: String
+    private var shouldAnimateToInitialNumber: Bool
+    private var font: Font
+    private var topBottomFadeDistance: CGFloat
+    private var fadeColor: Color
     
-    @State var shouldAnimate = false
-    @State var numberFrame: CGSize = .zero
-    @State var decimalSeparatorFrame: CGSize = .zero
-    @State var thousandsSeparatorFrame: CGSize = .zero
-    
+    // Properties used for view rendering
     private let numberComponentsManager = NumberComponentsManager()
     private var numberComponents: [Int] = []
+    private var animation: Animation? {
+        shouldAnimate ? Animation.interpolatingSpring(stiffness: 8, damping: 8, initialVelocity: 2).speed(6) : .none
+    }
+    
+    @State private var shouldAnimate = false
+    @State private var numberFrame: CGSize = .zero
+    @State private var decimalSeparatorFrame: CGSize = .zero
+    @State private var thousandsSeparatorFrame: CGSize = .zero
     
     public init(number: Double, decimalPlaces: Int = 2, prefix: String = "", suffix: String = "", decimalSeparator: String = ".", thousandsSeparator: String = ",", shouldAnimateToInitialNumber: Bool = false, font: Font = .system(size: 30, weight: .bold, design: .rounded), topBottomFadeDistance: CGFloat = 3, fadeColor: Color = Color(.systemBackground)) {
         self.number = number
@@ -40,25 +45,6 @@ public struct NumberTicker: View {
         self.fadeColor = fadeColor
         
         numberComponents = numberComponentsManager.components(for: number, decimalPlaces: decimalPlaces).reversed()
-    }
-    
-    private var animation: Animation? {
-        shouldAnimate ? Animation.interpolatingSpring(stiffness: 8, damping: 8, initialVelocity: 2).speed(6) : .none
-    }
-
-    private func getNumberComponent(at index: Int) -> Int {
-        if index < numberComponents.count {
-            return numberComponents[index]
-        }
-        return 0
-    }
-    
-    func shouldInsertThousandsSeparator(at index: Int) -> Bool {
-        index != numberComponents.count - 1 && index >= decimalPlaces + 2 && (numberComponents.count - decimalPlaces) > 3 && (index - decimalPlaces + 1) % 3 == 0
-    }
-    
-    func shouldInsertDecimalSeparator(at index: Int) -> Bool {
-        numberComponents.count > 2 && index == decimalPlaces - 1
     }
 
     public var body: some View {
@@ -97,5 +83,22 @@ public struct NumberTicker: View {
                 self.shouldAnimate = true
             }
         }
+    }
+}
+
+extension NumberTicker {
+    private func getNumberComponent(at index: Int) -> Int {
+        if index < numberComponents.count {
+            return numberComponents[index]
+        }
+        return 0
+    }
+    
+    private func shouldInsertThousandsSeparator(at index: Int) -> Bool {
+        index != numberComponents.count - 1 && index >= decimalPlaces + 2 && (numberComponents.count - decimalPlaces) > 3 && (index - decimalPlaces + 1) % 3 == 0
+    }
+    
+    private func shouldInsertDecimalSeparator(at index: Int) -> Bool {
+        numberComponents.count > 2 && index == decimalPlaces - 1
     }
 }

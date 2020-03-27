@@ -36,8 +36,6 @@ struct ContentView: View {
             Text("Number reference: \(currentNumber)")
         }
         .padding(25)
-        .onAppear {
-        }
     }
 }
 
