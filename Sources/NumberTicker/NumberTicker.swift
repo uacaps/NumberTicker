@@ -29,8 +29,8 @@ public struct NumberTicker: View {
     @State private var digitFrame: CGSize = .zero
     
     public init(number: Double,
-                decimalPlaces: Int = 2,
-                numberStyle: NumberFormatter.Style = .decimal,
+                decimalPlaces: Int = 0,
+                numberStyle: NumberFormatter.Style = .none,
                 locale: Locale = .autoupdatingCurrent,
                 prefix: String = "",
                 suffix: String = "",
