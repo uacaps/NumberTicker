@@ -13,13 +13,16 @@ public struct NumberTicker: View {
     private var suffix: String
     private var shouldAnimateToInitialNumber: Bool
     private var font: Font
-    private var topBottomFadeDistance: CGFloat
-    private var fadeColor: Color
+    private var topBottomPadding: CGFloat
+    private var fadeColor: Color?
     
     // Properties used for view rendering
     private var numberComponentsManager = NumberComponentsManager()
     private var animation: Animation? {
         shouldAnimate ? Animation.interpolatingSpring(stiffness: 8, damping: 8, initialVelocity: 2).speed(6) : .none
+    }
+    private var shouldShowFade: Bool {
+        topBottomPadding >= 0 && fadeColor != nil
     }
     
     @State private var shouldAnimate = false
@@ -33,13 +36,13 @@ public struct NumberTicker: View {
                 suffix: String = "",
                 shouldAnimateToInitialNumber: Bool = false,
                 font: Font = .system(size: 30, weight: .bold, design: .rounded),
-                topBottomFadeDistance: CGFloat = 3,
-                fadeColor: Color = Color(.systemBackground)) {
+                topBottomPadding: CGFloat = 0,
+                fadeColor: Color? = nil) {
         self.prefix = prefix
         self.suffix = suffix
         self.shouldAnimateToInitialNumber = shouldAnimateToInitialNumber
         self.font = font
-        self.topBottomFadeDistance = topBottomFadeDistance
+        self.topBottomPadding = topBottomPadding
         self.fadeColor = fadeColor
         
         numberComponentsManager.setup(for: number, decimalPlaces: decimalPlaces, numberStyle: numberStyle, locale: locale)
@@ -53,7 +56,7 @@ public struct NumberTicker: View {
             }
             ForEach(0..<numberComponentsManager.numberComponents.count, id: \.self) { index in
                 HStack(spacing: 0) {
-                    NumberComponent(numberComponent: self.numberComponentsManager.getNumberComponent(at: index), animation: self.animation, font: self.font, topBottomFadeDistance: self.topBottomFadeDistance, digitFrame: self.$digitFrame)
+                    NumberComponent(numberComponent: self.numberComponentsManager.getNumberComponent(at: index), animation: self.animation, font: self.font, digitFrame: self.$digitFrame)
                 }
             }
             if !suffix.isEmpty {
@@ -61,8 +64,8 @@ public struct NumberTicker: View {
                     .animation(.none)
             }
         }
-        .overlay(FadeOverlay(height: topBottomFadeDistance * 1.5, color: fadeColor))
-        .overlay(TextSizingCalculationOverlayView(text: "0", font: font, topBottomPadding: topBottomFadeDistance, frame: $digitFrame))
+        .overlay(shouldShowFade ? FadeOverlay(height: topBottomPadding * 1.5, color: fadeColor!) : nil)
+        .overlay(TextSizingCalculationOverlayView(text: "0", font: font, topBottomPadding: topBottomPadding, frame: $digitFrame))
         .animation(animation)
         .onAppear {
             self.shouldAnimate = self.shouldAnimateToInitialNumber

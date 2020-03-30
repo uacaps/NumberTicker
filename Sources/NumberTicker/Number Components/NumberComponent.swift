@@ -11,7 +11,6 @@ struct NumberComponent: View {
     var numberComponent: NumberComponentsManager.NumberComponent
     var animation: Animation? = .default
     var font: Font
-    var topBottomFadeDistance: CGFloat
     
     private var digit: Int?
     private var nonDigit: String?
@@ -20,12 +19,10 @@ struct NumberComponent: View {
     
     init(numberComponent: NumberComponentsManager.NumberComponent,
          animation: Animation? = .default, font: Font,
-         topBottomFadeDistance: CGFloat,
          digitFrame: Binding<CGSize>) {
         self.numberComponent = numberComponent
         self.animation = animation
         self.font = font
-        self.topBottomFadeDistance = topBottomFadeDistance
         self._digitFrame = digitFrame
         
         digit = getDigit(from: numberComponent)
@@ -47,14 +44,14 @@ struct NumberComponent: View {
 extension NumberComponent {
     // NOTE: These functions are used as a workaround because control flows like switch or if let are not available in view builder yet
     
-    func getDigit(from numberComponent: NumberComponentsManager.NumberComponent) -> Int? {
+    private func getDigit(from numberComponent: NumberComponentsManager.NumberComponent) -> Int? {
         if case NumberComponentsManager.NumberComponent.digit(let digit) = numberComponent {
             return digit
         }
         return nil
     }
     
-    func getNonDigit(from numberComponent: NumberComponentsManager.NumberComponent) -> String? {
+    private func getNonDigit(from numberComponent: NumberComponentsManager.NumberComponent) -> String? {
         if case NumberComponentsManager.NumberComponent.nonDigit(let separator) = numberComponent {
             return separator
         }

@@ -10,7 +10,7 @@ import Foundation
 class NumberComponentsManager {
     private typealias DigitsConvertible = Numeric & LosslessStringConvertible
     
-    enum NumberComponent {
+    enum NumberComponent: Equatable {
         case nonDigit(String)
         case digit(Int)
     }
@@ -18,7 +18,7 @@ class NumberComponentsManager {
     var numberComponents: [NumberComponent] = []
     private var number: Double = 0
     private var decimalPlaces: Int = 2
-    private let numberFormatter = NumberFormatter()
+    let numberFormatter = NumberFormatter()
     
     func setup(for number: Double,
                decimalPlaces: Int,
@@ -46,7 +46,7 @@ extension NumberComponentsManager {
 }
 
 extension NumberComponentsManager {
-    private func components(for number: Double, decimalPlaces: Int, formatter: NumberFormatter) -> [NumberComponent] {
+    internal func components(for number: Double, decimalPlaces: Int, formatter: NumberFormatter) -> [NumberComponent] {
         guard let formattedNumberString = formatter.string(from: NSNumber(value: number)) else { return [] }
         return formattedNumberString.compactMap {
             if let digit = $0.wholeNumberValue {

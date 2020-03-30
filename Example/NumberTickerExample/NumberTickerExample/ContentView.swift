@@ -17,7 +17,7 @@ struct ContentView: View {
     @State var currentNumber = 150000.0
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 10) {
             NumberTicker(number: currentNumber * 0.84025, prefix: "£", font: Font.system(size: 25, weight: .medium, design: .serif))
                 .foregroundColor(Color(.secondaryLabel))
                 .padding(.bottom, 5)
