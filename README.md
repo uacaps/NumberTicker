@@ -38,7 +38,7 @@ NumberTicker(number: 1234.56, ..., font: .system(size: 30, weight: .bold, design
 **2. Decimal Places**
 ```swift
 // This will effect how many decimal places will be shown in the NumberTicker.
-// Default: 2
+// Default: 0
 NumberTicker(number: 1234.56, decimalPlaces: 5, ...)
 ```
 
