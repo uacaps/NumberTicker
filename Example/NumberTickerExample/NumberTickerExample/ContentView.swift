@@ -21,11 +21,11 @@ struct ContentView: View {
             NumberTicker(number: currentNumber * 0.84025, prefix: "£", font: Font.system(size: 25, weight: .medium, design: .serif))
                 .foregroundColor(Color(.secondaryLabel))
                 .padding(.bottom, 5)
-            NumberTicker(number: currentNumber * 0.920078, suffix: "€", decimalSeparator: ",", thousandsSeparator: ".", font: Font.system(size: 25, weight: .medium, design: .serif)) // German Style
+            NumberTicker(number: currentNumber * 0.920078, numberStyle: NumberFormatter.Style.currencyPlural, locale: Locale(identifier: "de_DE"), font: Font.system(size: 25, weight: .medium, design: .serif)) // German Style
                 .foregroundColor(Color(.secondaryLabel))
                 .padding(.bottom, 15)
             NumberTicker(number: currentNumber, prefix: "US $") // US Style
-            NumberTicker(number: currentNumber * 4, decimalPlaces: 0, prefix: (currentNumber * 4).isInteger ? "" : "~", suffix: currentNumber * 4 == 1 ? " Quarter" : " Quarters", font: Font.system(size: 20, weight: .medium))
+            NumberTicker(number: currentNumber * 4, decimalPlaces: 0, numberStyle: .none, prefix: (currentNumber * 4).isInteger ? "" : "~", suffix: currentNumber * 4 == 1 ? " Quarter" : " Quarters", font: Font.system(size: 20, weight: .medium))
                 .foregroundColor(Color(.secondaryLabel))
                 .padding(.bottom, 80)
             

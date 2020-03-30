@@ -9,42 +9,40 @@ import SwiftUI
 
 public struct NumberTicker: View {
     // User initialized properties
-    private var number: Double
-    private var decimalPlaces: Int
     private var prefix: String
     private var suffix: String
-    private var decimalSeparator: String
-    private var thousandsSeparator: String
     private var shouldAnimateToInitialNumber: Bool
     private var font: Font
     private var topBottomFadeDistance: CGFloat
     private var fadeColor: Color
     
     // Properties used for view rendering
-    private let numberComponentsManager = NumberComponentsManager()
-    private var numberComponents: [Int] = []
+    private var numberComponentsManager = NumberComponentsManager()
     private var animation: Animation? {
         shouldAnimate ? Animation.interpolatingSpring(stiffness: 8, damping: 8, initialVelocity: 2).speed(6) : .none
     }
     
     @State private var shouldAnimate = false
-    @State private var numberFrame: CGSize = .zero
-    @State private var decimalSeparatorFrame: CGSize = .zero
-    @State private var thousandsSeparatorFrame: CGSize = .zero
+    @State private var digitFrame: CGSize = .zero
     
-    public init(number: Double, decimalPlaces: Int = 2, prefix: String = "", suffix: String = "", decimalSeparator: String = ".", thousandsSeparator: String = ",", shouldAnimateToInitialNumber: Bool = false, font: Font = .system(size: 30, weight: .bold, design: .rounded), topBottomFadeDistance: CGFloat = 3, fadeColor: Color = Color(.systemBackground)) {
-        self.number = number
-        self.decimalPlaces = decimalPlaces
+    public init(number: Double,
+                decimalPlaces: Int = 2,
+                numberStyle: NumberFormatter.Style = .decimal,
+                locale: Locale = .autoupdatingCurrent,
+                prefix: String = "",
+                suffix: String = "",
+                shouldAnimateToInitialNumber: Bool = false,
+                font: Font = .system(size: 30, weight: .bold, design: .rounded),
+                topBottomFadeDistance: CGFloat = 3,
+                fadeColor: Color = Color(.systemBackground)) {
         self.prefix = prefix
         self.suffix = suffix
-        self.decimalSeparator = decimalSeparator
-        self.thousandsSeparator = thousandsSeparator
         self.shouldAnimateToInitialNumber = shouldAnimateToInitialNumber
         self.font = font
         self.topBottomFadeDistance = topBottomFadeDistance
         self.fadeColor = fadeColor
         
-        numberComponents = numberComponentsManager.components(for: number, decimalPlaces: decimalPlaces).reversed()
+        numberComponentsManager.setup(for: number, decimalPlaces: decimalPlaces, numberStyle: numberStyle, locale: locale)
     }
 
     public var body: some View {
@@ -53,16 +51,9 @@ public struct NumberTicker: View {
                 NumberAccessory(text: prefix, style: .prefix, font: font)
                     .animation(.none)
             }
-            ForEach((0..<numberComponents.count).reversed(), id: \.self) { index in
+            ForEach(0..<numberComponentsManager.numberComponents.count, id: \.self) { index in
                 HStack(spacing: 0) {
-                    if self.shouldInsertDecimalSeparator(at: index) {
-                        NumberSeparator(symbol: self.decimalSeparator, font: self.font, frame: self.$decimalSeparatorFrame)
-                            .animation(.none)
-                    } else if self.shouldInsertThousandsSeparator(at: index) {
-                        NumberSeparator(symbol: self.thousandsSeparator, font: self.font, frame: self.$thousandsSeparatorFrame)
-                            .animation(.none)
-                    }
-                    NumberWheel(visibleNumber: self.getNumberComponent(at: index), animation: self.animation, font: self.font, frame: self.$numberFrame)
+                    NumberComponent(numberComponent: self.numberComponentsManager.getNumberComponent(at: index), animation: self.animation, font: self.font, topBottomFadeDistance: self.topBottomFadeDistance, digitFrame: self.$digitFrame)
                 }
             }
             if !suffix.isEmpty {
@@ -71,9 +62,7 @@ public struct NumberTicker: View {
             }
         }
         .overlay(FadeOverlay(height: topBottomFadeDistance * 1.5, color: fadeColor))
-        .overlay(TextSizingCalculationOverlayView(text: "0", font: font, topBottomPadding: topBottomFadeDistance, frame: $numberFrame))
-        .overlay(TextSizingCalculationOverlayView(text: decimalSeparator, font: font, topBottomPadding: topBottomFadeDistance, frame: $decimalSeparatorFrame))
-        .overlay(TextSizingCalculationOverlayView(text: thousandsSeparator, font: font, topBottomPadding: topBottomFadeDistance, frame: $thousandsSeparatorFrame))
+        .overlay(TextSizingCalculationOverlayView(text: "0", font: font, topBottomPadding: topBottomFadeDistance, frame: $digitFrame))
         .animation(animation)
         .onAppear {
             self.shouldAnimate = self.shouldAnimateToInitialNumber
@@ -83,22 +72,5 @@ public struct NumberTicker: View {
                 self.shouldAnimate = true
             }
         }
-    }
-}
-
-extension NumberTicker {
-    private func getNumberComponent(at index: Int) -> Int {
-        if index < numberComponents.count {
-            return numberComponents[index]
-        }
-        return 0
-    }
-    
-    private func shouldInsertThousandsSeparator(at index: Int) -> Bool {
-        index != numberComponents.count - 1 && index >= decimalPlaces + 2 && (numberComponents.count - decimalPlaces) > 3 && (index - decimalPlaces + 1) % 3 == 0
-    }
-    
-    private func shouldInsertDecimalSeparator(at index: Int) -> Bool {
-        numberComponents.count > 2 && index == decimalPlaces - 1
     }
 }

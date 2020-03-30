@@ -7,14 +7,13 @@
 
 import SwiftUI
 
-struct NumberSeparator: View {
+struct NumberStyleAccessory: View {
     var symbol: String
     var font: Font
-    @Binding var frame: CGSize
     
     var body: some View {
         Text(symbol)
             .font(font)
-            .frame(width: frame.width, height: frame.height)
+            .padding([.leading, .trailing], 1)
     }
 }

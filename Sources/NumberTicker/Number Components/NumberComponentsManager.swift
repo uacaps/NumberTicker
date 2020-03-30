@@ -7,29 +7,53 @@
 
 import Foundation
 
-struct NumberComponentsManager {
+class NumberComponentsManager {
     private typealias DigitsConvertible = Numeric & LosslessStringConvertible
     
-    func components(for number: Double, decimalPlaces: Int) -> [Int] {
-        guard decimalPlaces > 0 else {
-            return digits(for: Int(round(number)))
-        }
-        
-        // Make sure floating point precision is not messing up the displayed number, i.e. 12.999999999991 should be displayed as 13.00 instead of 12.99; 12.989999999991 should be displayed as 12.99 instead of 12.98 if decimal places are set to 2
-        let decimalRoundingAccuracy: Double = pow(10, Double(decimalPlaces))
-        let roundedNumber = round(number * decimalRoundingAccuracy) / decimalRoundingAccuracy
-        let integerPartDigits = digits(for: Int(roundedNumber))
-        
-        let decimalPartAsInteger = Int(round(roundedNumber.truncatingRemainder(dividingBy: 1) * decimalRoundingAccuracy))
-        var decimalDigits = digits(for: decimalPartAsInteger)
-        if decimalPlaces - decimalDigits.count > 0 {
-            decimalDigits = Array(repeating: 0, count: decimalPlaces - decimalDigits.count) + decimalDigits // Pad decimals up to desired length
-        }
-        
-        return integerPartDigits + decimalDigits
+    enum NumberComponent {
+        case nonDigit(String)
+        case digit(Int)
     }
     
-    private func digits<T: DigitsConvertible>(for number: T) -> [Int] {
-        String(number).compactMap{ $0.wholeNumberValue }
+    var numberComponents: [NumberComponent] = []
+    private var number: Double = 0
+    private var decimalPlaces: Int = 2
+    private let numberFormatter = NumberFormatter()
+    
+    func setup(for number: Double,
+               decimalPlaces: Int,
+               numberStyle: NumberFormatter.Style = .decimal,
+               locale: Locale = .autoupdatingCurrent) {
+        self.number = number
+        self.decimalPlaces = decimalPlaces
+        
+        self.numberFormatter.minimumFractionDigits = decimalPlaces
+        self.numberFormatter.maximumFractionDigits = decimalPlaces
+        self.numberFormatter.numberStyle = numberStyle
+        self.numberFormatter.locale = locale
+        
+        numberComponents = components(for: number, decimalPlaces: decimalPlaces, formatter: numberFormatter)
+    }
+}
+
+extension NumberComponentsManager {
+    func getNumberComponent(at index: Int) -> NumberComponent {
+        if index < numberComponents.count {
+            return numberComponents[index]
+        }
+        return .digit(0)
+    }
+}
+
+extension NumberComponentsManager {
+    private func components(for number: Double, decimalPlaces: Int, formatter: NumberFormatter) -> [NumberComponent] {
+        guard let formattedNumberString = formatter.string(from: NSNumber(value: number)) else { return [] }
+        return formattedNumberString.compactMap {
+            if let digit = $0.wholeNumberValue {
+                return .digit(digit)
+            } else {
+                return .nonDigit(String($0))
+            }
+        }
     }
 }
