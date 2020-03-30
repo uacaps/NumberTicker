@@ -58,7 +58,7 @@ NumberTicker(..., locale: Locale("de_DE"), ...)
 
 **5. Prefix/Suffix**
 ```swift
-// This add a prefix or suffix to the NumberTicker. This can be any String.
+// This adds a prefix and/or suffix to the NumberTicker. This can be any String.
 // Default: ""
 NumberTicker(..., prefix: "~", suffix: "Quarters", ...)
 ```
