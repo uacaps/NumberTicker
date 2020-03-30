@@ -83,3 +83,9 @@ NumberTicker(number: 1234.56, ..., topBottomPadding: 5, ...)
 // Default: nil
 NumberTicker(number: 1234.56, ..., fadeColor: .red, ...)
 ```
+
+## Author
+👨‍💻 [Niklas Fahl](https://github.com/fahlout)
+
+## License
+NumberTicker is available under the MIT license. See the [LICENSE](https://github.com/fahlout/NumberTicker/blob/master/LICENSE) file for more info.
