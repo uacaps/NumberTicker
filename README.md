@@ -2,6 +2,9 @@
 
 A rotating number component inspired by [Robinhood](https://github.com/robinhood) written in SwiftUI.
 
+![alt text](https://raw.githubusercontent.com/fahlout/Resources/master/NumberTickerDemo.GIF "Number Ticker Demo")
+
+
 ## Requirements
 |Operating System|Version|
 |----------------|:-----:|
