@@ -29,8 +29,13 @@ final class NumberComponentsManagerTests: XCTestCase {
     }
     
     func testGetComponents() {
-        numberComponentsManager.setup(for: 1500000.73, decimalPlaces: 2, numberStyle: .decimal, locale: Locale(identifier: "en_US"))
-        let components = numberComponentsManager.components(for: 1500000.73, decimalPlaces: 2, formatter: numberComponentsManager.numberFormatter)
+        let numberFormatter = NumberFormatter()
+        numberFormatter.minimumFractionDigits = 2
+        numberFormatter.maximumFractionDigits = 2
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.locale = Locale(identifier: "en_US")
+        
+        let components = numberComponentsManager.components(for: 1500000.73, decimalPlaces: 2, formatter: numberFormatter)
         let testComponents: [NumberComponentsManager.NumberComponent] = [.digit(1), .nonDigit(","), .digit(5), .digit(0), .digit(0), .nonDigit(","), .digit(0), .digit(0), .digit(0), .nonDigit("."), .digit(7), .digit(3)]
         XCTAssertEqual(components, testComponents)
     }

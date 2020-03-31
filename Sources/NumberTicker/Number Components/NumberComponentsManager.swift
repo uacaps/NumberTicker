@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  NumberComponentsManager.swift
 //  
 //
 //  Created by Niklas Fahl on 3/27/20.
@@ -7,20 +7,20 @@
 
 import Foundation
 
-class NumberComponentsManager {
+internal class NumberComponentsManager {
     private typealias DigitsConvertible = Numeric & LosslessStringConvertible
     
-    enum NumberComponent: Equatable {
+    public enum NumberComponent: Equatable {
         case nonDigit(String)
         case digit(Int)
     }
     
-    var numberComponents: [NumberComponent] = []
+    public private(set) var numberComponents: [NumberComponent] = []
     private var number: Double = 0
     private var decimalPlaces: Int = 2
-    let numberFormatter = NumberFormatter()
+    private let numberFormatter = NumberFormatter()
     
-    func setup(for number: Double,
+    public func setup(for number: Double,
                decimalPlaces: Int,
                numberStyle: NumberFormatter.Style = .decimal,
                locale: Locale = .autoupdatingCurrent) {
@@ -37,7 +37,7 @@ class NumberComponentsManager {
 }
 
 extension NumberComponentsManager {
-    func getNumberComponent(at index: Int) -> NumberComponent {
+    public func getNumberComponent(at index: Int) -> NumberComponent {
         if index < numberComponents.count {
             return numberComponents[index]
         }
@@ -46,7 +46,7 @@ extension NumberComponentsManager {
 }
 
 extension NumberComponentsManager {
-    internal func components(for number: Double, decimalPlaces: Int, formatter: NumberFormatter) -> [NumberComponent] {
+    public func components(for number: Double, decimalPlaces: Int, formatter: NumberFormatter) -> [NumberComponent] {
         guard let formattedNumberString = formatter.string(from: NSNumber(value: number)) else { return [] }
         return formattedNumberString.compactMap {
             if let digit = $0.wholeNumberValue {

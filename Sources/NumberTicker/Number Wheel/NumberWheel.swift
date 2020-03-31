@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  NumberWheel.swift
 //  
 //
 //  Created by Niklas Fahl on 3/27/20.
@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct NumberWheel: View {
-    var visibleNumber: Int = 0
-    var animation: Animation? = .default
-    var font: Font
+internal struct NumberWheel: View {
+    public var visibleNumber: Int = 0
+    public var animation: Animation? = .default
+    public var font: Font
     
     private let numbers = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
     
-    @Binding var frame: CGSize
+    @Binding public var frame: CGSize
     @State private var shouldShowActualOffset = false
     
     private func offset() -> CGFloat {
@@ -23,7 +23,7 @@ struct NumberWheel: View {
         return CGFloat(-Double(height) * offsetMultiplier)
     }
     
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             ForEach(self.numbers, id: \.self) { number in
                 SingleNumberElement(number: number, font: self.font, frame: self.$frame)

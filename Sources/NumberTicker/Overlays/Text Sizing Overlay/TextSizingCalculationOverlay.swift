@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  TextSizingCalculationOverlayView.swift
 //  
 //
 //  Created by Niklas Fahl on 3/27/20.
@@ -7,14 +7,14 @@
 
 import SwiftUI
 
-struct TextSizingCalculationOverlayView: View {
-    var text: String
-    var font: Font
-    var topBottomPadding: CGFloat = 0
+internal struct TextSizingCalculationOverlayView: View {
+    public var text: String
+    public var font: Font
+    public var topBottomPadding: CGFloat = 0
     
-    @Binding var frame: CGSize
+    @Binding public var frame: CGSize
     
-    func makeView(geometry: GeometryProxy) -> some View {
+    private func makeView(geometry: GeometryProxy) -> some View {
         DispatchQueue.main.async {
             self.frame = CGSize(width: geometry.size.width, height: geometry.size.height + (self.topBottomPadding * 2))
         }
@@ -22,7 +22,7 @@ struct TextSizingCalculationOverlayView: View {
             .font(font)
     }
     
-    var body: some View {
+    public var body: some View {
         VStack {
             Text(text)
                 .font(font)

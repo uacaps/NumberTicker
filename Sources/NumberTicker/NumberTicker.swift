@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  NumberTicker.swift
 //  
 //
 //  Created by Niklas Fahl on 3/27/20.
@@ -28,6 +28,19 @@ public struct NumberTicker: View {
     @State private var shouldAnimate = false
     @State private var digitFrame: CGSize = .zero
     
+    /// Initialize NumberTicker with your desired customization options.
+    ///
+    /// - Parameters:
+    ///   - number: The number to be displayed.
+    ///   - decimalPlaces: The number of decimal places to be displayed for the number. Defaults to 0.
+    ///   - numberStyle: The style for the number to be displayed in based on NumberFormatter.Style. Defaults to .none.
+    ///   - locale: The locale used for formatting the number. Defaults to .autoupdatingCurrent.
+    ///   - prefix: The prefix to be added to the displayed number. Defaults to empty string.
+    ///   - suffix: The suffic to be added to the displayed number. Defaults to empty string.
+    ///   - shouldAnimateToInitialNumber: Whether or not the NumberTicker should animate to the initial number that is set when NumberTicker first appears. Defaults to false.
+    ///   - font: The font used for the number as well as prefix and suffix. This directly impacts the size of the NumberTicker.
+    ///   - topBottomPadding: Extra padding for the top and bottom of the NumberTicker. This increases the amount of space between each digit in each number column and directly impacts the overall sizing of the NumberTicker.
+    ///   - fadeColor: The color used to add a gradient fade to the top and bottom of the NumberTicker. Note: Fade effect will only show if both the fadeColor is set and topBottomPadding is greater than 0.
     public init(number: Double,
                 decimalPlaces: Int = 0,
                 numberStyle: NumberFormatter.Style = .none,

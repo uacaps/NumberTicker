@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  SingleNumberElement.swift
 //  
 //
 //  Created by Niklas Fahl on 3/27/20.
@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-struct SingleNumberElement: View {
-    var number: Int = 0
-    var font: Font
-    @Binding var frame: CGSize
+internal struct SingleNumberElement: View {
+    public var number: Int = 0
+    public var font: Font
+    @Binding public var frame: CGSize
     
-    var body: some View {
+    public var body: some View {
         Text("\(self.number)")
             .font(font)
             .frame(width: frame.width, height: frame.height)

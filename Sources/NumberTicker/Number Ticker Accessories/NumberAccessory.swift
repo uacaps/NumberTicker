@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  NumberAccessory.swift
 //  
 //
 //  Created by Niklas Fahl on 3/27/20.
@@ -7,15 +7,15 @@
 
 import SwiftUI
 
-struct NumberAccessory: View {
-    enum Style {
+internal struct NumberAccessory: View {
+    public enum Style {
         case prefix
         case suffix
     }
     
-    var text: String
-    var style: Style
-    var font: Font
+    public var text: String
+    public var style: Style
+    public var font: Font
     
     private var paddingEdge: Edge.Set {
         switch style {
@@ -26,7 +26,7 @@ struct NumberAccessory: View {
         }
     }
     
-    var body: some View {
+    public var body: some View {
         Text(text)
             .font(font)
             .padding(paddingEdge, 2)

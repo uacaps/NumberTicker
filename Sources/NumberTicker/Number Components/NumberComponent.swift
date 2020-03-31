@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  NumberComponent.swift
 //  
 //
 //  Created by Niklas Fahl on 3/30/20.
@@ -7,17 +7,17 @@
 
 import SwiftUI
 
-struct NumberComponent: View {
-    var numberComponent: NumberComponentsManager.NumberComponent
-    var animation: Animation? = .default
-    var font: Font
+internal struct NumberComponent: View {
+    public var numberComponent: NumberComponentsManager.NumberComponent
+    public var animation: Animation? = .default
+    public var font: Font
     
     private var digit: Int?
     private var nonDigit: String?
     
-    @Binding var digitFrame: CGSize
+    @Binding public var digitFrame: CGSize
     
-    init(numberComponent: NumberComponentsManager.NumberComponent,
+    public init(numberComponent: NumberComponentsManager.NumberComponent,
          animation: Animation? = .default, font: Font,
          digitFrame: Binding<CGSize>) {
         self.numberComponent = numberComponent
@@ -29,7 +29,7 @@ struct NumberComponent: View {
         nonDigit = getNonDigit(from: numberComponent)
     }
     
-    var body: some View {
+    public var body: some View {
         Group {
             if digit != nil {
                 NumberWheel(visibleNumber: digit!, animation: self.animation, font: self.font, frame: self.$digitFrame)

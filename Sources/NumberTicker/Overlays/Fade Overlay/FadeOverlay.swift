@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  FadeOverlay.swift
 //  
 //
 //  Created by Niklas Fahl on 3/27/20.
@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct FadeOverlay: View {
-    var height: CGFloat
-    var color: Color
+internal struct FadeOverlay: View {
+    public var height: CGFloat
+    public var color: Color
     
-    var body: some View {
+    public var body: some View {
         VStack {
             LinearGradient(gradient: Gradient(colors: [color, color.opacity(0.0)]), startPoint: .top, endPoint: .bottom)
                 .frame(height: height)
