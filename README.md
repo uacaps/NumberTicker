@@ -88,4 +88,4 @@ NumberTicker(..., fadeColor: .red, ...)
 👨‍💻 [Niklas Fahl](https://github.com/fahlout)
 
 ## License
-NumberTicker is available under the MIT license. See the [LICENSE](https://github.com/fahlout/NumberTicker/blob/master/LICENSE) file for more info.
+NumberTicker is available under the University of Alabama License. See the [LICENSE](https://github.com/fahlout/NumberTicker/blob/master/LICENSE) file for more info.
