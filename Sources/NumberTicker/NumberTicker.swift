@@ -14,6 +14,7 @@ public struct NumberTicker: View {
     private var shouldAnimateToInitialNumber: Bool
     private var font: Font
     private var topBottomPadding: CGFloat
+    private var widthMultiplier: CGFloat
     private var fadeColor: Color?
     
     // Properties used for view rendering
@@ -50,12 +51,14 @@ public struct NumberTicker: View {
                 shouldAnimateToInitialNumber: Bool = false,
                 font: Font = .system(size: 30, weight: .bold, design: .rounded),
                 topBottomPadding: CGFloat = 0,
+                widthMultiplier: CGFloat = 1,
                 fadeColor: Color? = nil) {
         self.prefix = prefix
         self.suffix = suffix
         self.shouldAnimateToInitialNumber = shouldAnimateToInitialNumber
         self.font = font
         self.topBottomPadding = topBottomPadding
+        self.widthMultiplier = widthMultiplier
         self.fadeColor = fadeColor
         
         numberComponentsManager.setup(for: number, decimalPlaces: decimalPlaces, numberStyle: numberStyle, locale: locale)
@@ -78,7 +81,7 @@ public struct NumberTicker: View {
             }
         }
         .overlay(shouldShowFade ? FadeOverlay(height: topBottomPadding * 1.5, color: fadeColor!) : nil)
-        .overlay(TextSizingCalculationOverlayView(text: "0", font: font, topBottomPadding: topBottomPadding, frame: $digitFrame))
+        .overlay(TextSizingCalculationOverlayView(text: "0", font: font, topBottomPadding: topBottomPadding, widthMultiplier: widthMultiplier, frame: $digitFrame))
         .animation(animation)
         .onAppear {
             self.shouldAnimate = self.shouldAnimateToInitialNumber

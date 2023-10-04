@@ -11,12 +11,13 @@ internal struct TextSizingCalculationOverlayView: View {
     public var text: String
     public var font: Font
     public var topBottomPadding: CGFloat = 0
+    public var widthMultiplier: CGFloat
     
     @Binding public var frame: CGSize
     
     private func makeView(geometry: GeometryProxy) -> some View {
         DispatchQueue.main.async {
-            self.frame = CGSize(width: geometry.size.width, height: geometry.size.height + (self.topBottomPadding * 2))
+            self.frame = CGSize(width: geometry.size.width * widthMultiplier, height: geometry.size.height + (self.topBottomPadding * 2))
         }
         return Text(text)
             .font(font)
